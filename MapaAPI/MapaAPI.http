@@ -1,0 +1,6 @@
+@MapaAPI_HostAddress = http://localhost:5181
+
+GET {{MapaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
