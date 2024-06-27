@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MapaAPI.Models;
 
@@ -17,7 +18,7 @@ public partial class DireccionSucursal
 
     public decimal Longitud { get; set; }
 
-    public long? IdSucursal { get; set; }
-
-    public virtual Sucursal? IdSucursalNavigation { get; set; }
+    public long IdSucursal { get; set; }
+    [JsonIgnore]
+    public virtual Sucursal IdSucursalNavigation { get; set; } = null!;
 }

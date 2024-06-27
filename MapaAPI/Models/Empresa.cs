@@ -11,5 +11,5 @@ public partial class Empresa
 
     public bool Activo { get; set; }
 
-    public virtual ICollection<Sucursal> Sucursals { get; set; } = new List<Sucursal>();
+    public virtual Sucursal? Sucursal { get; set; }
 }

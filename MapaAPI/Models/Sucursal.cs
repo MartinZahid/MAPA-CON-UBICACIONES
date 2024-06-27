@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MapaAPI.Models;
 
@@ -13,9 +14,9 @@ public partial class Sucursal
 
     public string? PaginaWeb { get; set; }
 
-    public long? IdEmpresa { get; set; }
+    public long IdEmpresa { get; set; }
 
-    public virtual ICollection<DireccionSucursal> DireccionSucursals { get; set; } = new List<DireccionSucursal>();
-
-    public virtual Empresa? IdEmpresaNavigation { get; set; }
+    public virtual DireccionSucursal? DireccionSucursal { get; set; }
+    [JsonIgnore]
+    public virtual Empresa IdEmpresaNavigation { get; set; } = null!;
 }

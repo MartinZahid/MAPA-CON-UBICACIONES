@@ -29,9 +29,11 @@ public partial class PointSucursalesContext : DbContext
     {
         modelBuilder.Entity<DireccionSucursal>(entity =>
         {
-            entity.HasKey(e => e.IdDireccionSucursal).HasName("PK__direccio__F4EB78B0DAC83E19");
+            entity.HasKey(e => e.IdDireccionSucursal).HasName("PK__direccio__F4EB78B0673C7F6F");
 
             entity.ToTable("direccionSucursal");
+
+            entity.HasIndex(e => e.IdSucursal, "UQ__direccio__F707694D2B2D3ACF").IsUnique();
 
             entity.Property(e => e.IdDireccionSucursal).HasColumnName("idDireccionSucursal");
             entity.Property(e => e.Calle)
@@ -54,14 +56,15 @@ public partial class PointSucursalesContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("numeroInterior");
 
-            entity.HasOne(d => d.IdSucursalNavigation).WithMany(p => p.DireccionSucursals)
-                .HasForeignKey(d => d.IdSucursal)
-                .HasConstraintName("FK__direccion__idSuc__04E4BC85");
+            entity.HasOne(d => d.IdSucursalNavigation).WithOne(p => p.DireccionSucursal)
+                .HasForeignKey<DireccionSucursal>(d => d.IdSucursal)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__direccion__idSuc__17F790F9");
         });
 
         modelBuilder.Entity<Empresa>(entity =>
         {
-            entity.HasKey(e => e.IdEmpresa).HasName("PK__empresa__75D2CED4E19260BA");
+            entity.HasKey(e => e.IdEmpresa).HasName("PK__empresa__75D2CED41776D69A");
 
             entity.ToTable("empresa");
 
@@ -75,9 +78,11 @@ public partial class PointSucursalesContext : DbContext
 
         modelBuilder.Entity<Sucursal>(entity =>
         {
-            entity.HasKey(e => e.IdSucursal).HasName("PK__sucursal__F707694C7131FD5F");
+            entity.HasKey(e => e.IdSucursal).HasName("PK__sucursal__F707694C70B17ABD");
 
             entity.ToTable("sucursal");
+
+            entity.HasIndex(e => e.IdEmpresa, "UQ__sucursal__75D2CED58D68186D").IsUnique();
 
             entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
             entity.Property(e => e.Celular)
@@ -94,9 +99,10 @@ public partial class PointSucursalesContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("paginaWeb");
 
-            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Sucursals)
-                .HasForeignKey(d => d.IdEmpresa)
-                .HasConstraintName("FK__sucursal__idEmpr__02084FDA");
+            entity.HasOne(d => d.IdEmpresaNavigation).WithOne(p => p.Sucursal)
+                .HasForeignKey<Sucursal>(d => d.IdEmpresa)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__sucursal__idEmpr__14270015");
         });
 
         OnModelCreatingPartial(modelBuilder);
