@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace MapaAPI.Models;
+namespace ApiMapa.Models;
 
 public partial class DireccionSucursal
 {
@@ -12,7 +12,7 @@ public partial class DireccionSucursal
 
     public string Cp { get; set; } = null!;
 
-    public string? NumeroInterior { get; set; }
+    public string NumeroInterior { get; set; } = null!;
 
     public decimal Latitud { get; set; }
 
