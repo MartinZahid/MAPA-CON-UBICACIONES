@@ -1,4 +1,4 @@
-namespace MapaAPI
+namespace ApiMapa
 {
     public class WeatherForecast
     {

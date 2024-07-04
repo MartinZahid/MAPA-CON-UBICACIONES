@@ -1,0 +1,6 @@
+@ApiMapa_HostAddress = http://localhost:5022
+
+GET {{ApiMapa_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
