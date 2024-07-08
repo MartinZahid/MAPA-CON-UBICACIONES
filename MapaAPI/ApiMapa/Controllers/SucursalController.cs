@@ -24,7 +24,7 @@ namespace ApiMapa.Controllers
         {
             return Ok(await Context.Empresas
                 .Include(e => e.Sucursals)
-                
+                .ThenInclude(e => e.DireccionSucursals)
                 .ToListAsync());
         }
     }

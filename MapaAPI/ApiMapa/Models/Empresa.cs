@@ -11,5 +11,7 @@ public partial class Empresa
 
     public ulong Activo { get; set; }
 
+    public string? Giro { get; set; }
+
     public virtual ICollection<Sucursal> Sucursals { get; set; } = new List<Sucursal>();
 }
