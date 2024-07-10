@@ -20,12 +20,18 @@ namespace ApiMapa.Controllers
 
         [HttpGet]
         [Route("ListarEmpresas")]
-        public async Task<ActionResult<List<Empresa>>> ListarEmpresas()
+   
+        public async Task<ActionResult> ObtenerEmpresa(long idEmpresa)
         {
-            return Ok(await Context.Empresas
-                .Include(e => e.Sucursals)
-                .ThenInclude(e => e.DireccionSucursals)
-                .ToListAsync());
+            var empresa = await Context.Empresas
+
+           .FirstOrDefaultAsync(e => e.IdEmpresa == idEmpresa);
+            if (empresa == null)
+            {
+                return NotFound(); // Retorna HTTP 404 si no se encuentra la empresa
+            }
+
+            return Ok(empresa); // Retorna la empresa encontrada
         }
     }
 }
