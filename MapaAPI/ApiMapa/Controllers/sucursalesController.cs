@@ -2,36 +2,45 @@
 using ApiMapa.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ApiMapa.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("Sucursal")]
-    public class SucursalController : ControllerBase
+    public class SucursalesController : ControllerBase
     {
+
         public MyDbContext Context { get; }
 
-        public SucursalController(MyDbContext context)
+        public SucursalesController(MyDbContext context)
         {
             Context = context;
         }
 
-        [HttpGet]
-        [Route("ListarEmpresas")]
-   
-        public async Task<ActionResult> ObtenerEmpresa(long idEmpresa)
-        {
-            var empresa = await Context.Empresas
 
-           .FirstOrDefaultAsync(e => e.IdEmpresa == idEmpresa);
-            if (empresa == null)
+
+        // GET: api/<SucursalesController>
+        [HttpGet]
+        public async Task<ActionResult<List<Empresa>>> ListarSucursales()
+        {
+            return Ok(await Context.Sucursals.ToListAsync());
+        }
+
+        // GET api/<SucursalesController>/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> ObtenerSucursal(int id)
+        {
+            var sucursal = await Context.Sucursals.FirstOrDefaultAsync(e => e.IdSucursal == id);
+            if (sucursal == null)
             {
-                return NotFound(); // Retorna HTTP 404 si no se encuentra la empresa
+                return NotFound();
             }
 
-            return Ok(empresa); // Retorna la empresa encontrada
+            return Ok(sucursal);
         }
+
+
     }
 }

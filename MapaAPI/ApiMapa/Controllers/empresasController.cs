@@ -38,8 +38,8 @@ namespace ApiMapa.Controllers
             return Ok(empresa);
         }
 
-        // GET: api/empresas/giro/{giro}
-        [HttpGet("giro/{giro}")]
+        // GET: api/empresas/{giro}
+        [HttpGet("{giro}")]
         public async Task<ActionResult> ObtenerEmpresaGiro(string giro)
         {
             var empresas = await Context.Empresas.Where(e => e.Giro == giro).ToListAsync();
