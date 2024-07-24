@@ -16,7 +16,7 @@ namespace ApiMapa2.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Empresa>>> ListarEmpresas()
+        public async Task<ActionResult<List<Empresa>>> listarEmpresas()
         {
             var empresas = await _context.Empresas.ToListAsync();
             return Ok(empresas);
