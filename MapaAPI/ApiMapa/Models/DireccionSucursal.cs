@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace ApiMapa.Models;
 
 public partial class DireccionSucursal
 {
-    public long IdDireccionSucursal { get; set; }
+    public int IdDireccion { get; set; }
 
-    public string Calle { get; set; } = null!;
+    public string? Direccion { get; set; }
 
-    public string Cp { get; set; } = null!;
+    public string CP { get; set; } = null!;
 
-    public string NumeroInterior { get; set; } = null!;
+    public string Ciudad { get; set; } = null!;
+
+    public string Estado { get; set; } = null!;
 
     public decimal Latitud { get; set; }
 
     public decimal Longitud { get; set; }
 
-    public long IdSucursal { get; set; }
-    [JsonIgnore]
-    public virtual Sucursal IdSucursalNavigation { get; set; } = null!;
+    public int? IdSucursal { get; set; }
+
+    public virtual Sucursal? IdSucursalNavigation { get; set; }
 }
