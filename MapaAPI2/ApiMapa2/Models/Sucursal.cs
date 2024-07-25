@@ -11,8 +11,8 @@ public partial class Sucursal
     public string Sucursal1 { get; set; } = null!;
 
     public int? IdEmpresa { get; set; }
-    [JsonIgnore]
+    
     public virtual DireccionSucursal? DireccionSucursal { get; set; }
-
+    [JsonIgnore]
     public virtual Empresa? IdEmpresaNavigation { get; set; }
 }

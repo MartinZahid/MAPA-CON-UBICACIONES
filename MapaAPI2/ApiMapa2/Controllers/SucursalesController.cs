@@ -17,16 +17,21 @@ namespace ApiMapa2.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Sucursal>>> listarSucursales()
-        {
-            var sucursales = await _context.Sucursals.ToListAsync();
-            return Ok(sucursales);
-        }
+            public async Task<ActionResult<List<Sucursal>>> listarSucursales()
+            {
+
+
+                return Ok(await _context.Sucursals
+                    .Include(s => s.DireccionSucursal)
+                    .ToListAsync());
+            }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> obtenerSucursal(int id)
         {
-            var sucursal = await _context.Sucursals.FirstOrDefaultAsync(e => e.IdEmpresa == id);
+            var sucursal = await _context.Sucursals
+                .Include(s => s.DireccionSucursal)
+                .FirstOrDefaultAsync(e => e.IdEmpresa == id);
             if (sucursal == null)
             {
                 return NotFound();
@@ -36,39 +41,45 @@ namespace ApiMapa2.Controllers
         }
 
 
-        //[HttpGet("por-ciudad")]
-        //public async Task<ActionResult<IEnumerable<Sucursal>>> ObtenerSucursalesPorCiudad([FromQuery] string ciudad)
-        //{
+        [HttpGet("por-ciudad")]
+        public async Task<ActionResult<IEnumerable<Sucursal>>> ObtenerSucursalesPorCiudad([FromQuery] string ciudad)
+        {
 
 
-        //    var sucursales = await _context.Sucursals
-        //        .Include(s => s.DireccionSucursal)
-        //        .Where(s => s.DireccionSucursal.Ciudad == ciudad)
-        //        .ToListAsync();
+            var sucursales = await _context.Sucursals
+                .Include(s => s.DireccionSucursal)
+                .Where(s => s.DireccionSucursal.Ciudad == ciudad)
+                .ToListAsync();
 
-        //    if (sucursales == null || !sucursales.Any())
-        //    {
-        //        return NotFound("No se encontraron sucursales en la ciudad especificada.");
-        //    }
+            if (sucursales == null || !sucursales.Any())
+            {
+                return NotFound("No se encontraron sucursales en la ciudad especificada.");
+            }
 
-        //    return Ok(sucursales);
-        //}
-
-
+            return Ok(sucursales);
+        }
 
 
 
-        //[HttpGet("por-estado")]
-        //public async Task<ActionResult> obtenerEmpresasPorEstado([FromQuery] string ciudad)
-        //{
-        //    var empresas = await _context.Empresas.Where(e => e.Giro == giro).ToListAsync();
-        //    if (!empresas.Any())
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    return Ok(empresas);
-        //}
+
+        [HttpGet("por-estado")]
+        public async Task<ActionResult> obtenerEmpresasPorEstado([FromQuery] string estado)
+        {
+            var sucursales = await _context.Sucursals
+                .Include(s => s.DireccionSucursal)
+                .Where(s => s.DireccionSucursal.Estado == estado)
+                .ToListAsync();
+
+
+
+            if (sucursales == null || !sucursales.Any())
+            {
+                return NotFound("No se encontraron sucursales en la ciudad especificada.");
+            }
+
+            return Ok(sucursales);
+        }
 
     }
 }
