@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ApiMapa2.Models;
+﻿namespace ApiMapa2.Models;
 
 public partial class Empresa
 {

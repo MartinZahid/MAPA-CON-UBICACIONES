@@ -1,6 +1,4 @@
-﻿using ApiMapa2.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiMapa2.Controllers
@@ -17,14 +15,41 @@ namespace ApiMapa2.Controllers
 
 
         [HttpGet]
-            public async Task<ActionResult<List<Sucursal>>> listarSucursales()
-            {
+        public async Task<ActionResult<List<Sucursal>>> listarSucursales()
+        {
 
 
-                return Ok(await _context.Sucursals
-                    .Include(s => s.DireccionSucursal)
-                    .ToListAsync());
-            }
+            return Ok(await _context.Sucursals
+                .Include(s => s.DireccionSucursal)
+                .ToListAsync());
+        }
+        
+        [HttpGet("estados")]
+        public async Task<ActionResult<List<string>>> listarEstados()
+        {
+            var estados = await _context.Sucursals
+                                .Include(s => s.DireccionSucursal)
+                                .Select(s => s.DireccionSucursal.Estado)
+                                .Distinct()
+                                .ToListAsync();
+                                
+            return Ok(estados);
+        }
+
+        [HttpGet("ciudades")]
+        public async Task<ActionResult<List<string>>> listarCiudades()
+        {
+            var ciudades = await _context.Sucursals
+                                .Include(s => s.DireccionSucursal)
+                                .Select(s => new { s.DireccionSucursal.Ciudad,s.DireccionSucursal.Estado})
+                                .Distinct()
+                                .ToListAsync();
+
+            return Ok(ciudades);
+        }
+
+
+
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> obtenerSucursal(int id)
@@ -41,7 +66,7 @@ namespace ApiMapa2.Controllers
         }
 
 
-        [HttpGet("por-ciudad")]
+        [HttpGet("ciudad")]
         public async Task<ActionResult<IEnumerable<Sucursal>>> ObtenerSucursalesPorCiudad([FromQuery] string ciudad)
         {
 
@@ -63,7 +88,7 @@ namespace ApiMapa2.Controllers
 
 
 
-        [HttpGet("por-estado")]
+        [HttpGet("estado")]
         public async Task<ActionResult> obtenerEmpresasPorEstado([FromQuery] string estado)
         {
             var sucursales = await _context.Sucursals

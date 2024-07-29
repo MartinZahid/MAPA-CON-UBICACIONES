@@ -10,7 +10,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PointSucursalesContext>();
 
+builder.Services.AddCors(Option =>
+{
 
+    Option.AddPolicy("NuevaPolitica", APP =>
+    {
+        APP.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("NuevaPolitica");
 app.UseAuthorization();
 
 app.MapControllers();
