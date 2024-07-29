@@ -1,6 +1,4 @@
-﻿using ApiMapa2.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiMapa2.Controllers
@@ -22,6 +20,16 @@ namespace ApiMapa2.Controllers
             return Ok(empresas);
         }
 
+        [HttpGet("giros")]
+        public async Task<ActionResult<List<string>>> listarGiros()
+        {
+            var giros = await _context.Empresas
+                                .Select(e => e.Giro)
+                                .Distinct()
+                                .ToListAsync();
+            return Ok(giros);
+        }
+
 
 
         [HttpGet("{id:int}")]
@@ -38,7 +46,7 @@ namespace ApiMapa2.Controllers
 
 
         // GET: api/empresas?giro={giro}
-        [HttpGet("por-giro")]
+        [HttpGet("giro")]
         public async Task<ActionResult> ObtenerEmpresasPorGiro([FromQuery] string giro)
         {
             var empresas = await _context.Empresas.Where(e => e.Giro == giro).ToListAsync();

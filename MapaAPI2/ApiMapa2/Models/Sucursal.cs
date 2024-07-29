@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace ApiMapa2.Models;
 
@@ -11,7 +9,7 @@ public partial class Sucursal
     public string Sucursal1 { get; set; } = null!;
 
     public int? IdEmpresa { get; set; }
-    
+
     public virtual DireccionSucursal? DireccionSucursal { get; set; }
     [JsonIgnore]
     public virtual Empresa? IdEmpresaNavigation { get; set; }

@@ -10,10 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PointSucursalesContext>();
 
-builder.Services.AddCors(Option => 
+builder.Services.AddCors(Option =>
 {
 
-    Option.AddPolicy("NuevaPolitica", APP => 
+    Option.AddPolicy("NuevaPolitica", APP =>
     {
         APP.AllowAnyOrigin()
         .AllowAnyHeader()
