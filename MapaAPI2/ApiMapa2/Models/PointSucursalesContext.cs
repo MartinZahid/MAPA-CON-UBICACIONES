@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApiMapa.Models;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
-namespace ApiMapa.Context;
+namespace ApiMapa2.Models;
 
-public partial class MyDbContext : DbContext
+public partial class PointSucursalesContext : DbContext
 {
-    public MyDbContext()
+    public PointSucursalesContext()
     {
     }
 
-    public MyDbContext(DbContextOptions<MyDbContext> options)
+    public PointSucursalesContext(DbContextOptions<PointSucursalesContext> options)
         : base(options)
     {
     }
@@ -25,7 +24,7 @@ public partial class MyDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=softwareforcs-db.cyg0a1g9kjty.us-west-1.rds.amazonaws.com;port=3306;database=PointSucursales;user=maguilar;password=esuXCC703_%@", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.35-mysql"));
+        => optionsBuilder.UseMySql("server=softwareforcs-db.cyg0a1g9kjty.us-west-1.rds.amazonaws.com;database=PointSucursales;user=maguilar;password=esuXCC703_%@", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.35-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,19 +34,25 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<DireccionSucursal>(entity =>
         {
-            entity.HasKey(e => e.IdDireccionSucursal).HasName("PRIMARY");
+            entity.HasKey(e => e.IdDireccion).HasName("PRIMARY");
 
             entity.ToTable("direccionSucursal");
 
-            entity.HasIndex(e => e.IdSucursal, "idSucursal");
+            entity.HasIndex(e => e.IdSucursal, "idSucursal").IsUnique();
 
-            entity.Property(e => e.IdDireccionSucursal).HasColumnName("idDireccionSucursal");
-            entity.Property(e => e.Calle)
+            entity.Property(e => e.IdDireccion).HasColumnName("idDireccion");
+            entity.Property(e => e.CP)
+                .HasMaxLength(32)
+                .HasColumnName("cP");
+            entity.Property(e => e.Ciudad)
                 .HasMaxLength(64)
-                .HasColumnName("calle");
-            entity.Property(e => e.Cp)
-                .HasMaxLength(16)
-                .HasColumnName("cp");
+                .HasColumnName("ciudad");
+            entity.Property(e => e.Direccion)
+                .HasMaxLength(100)
+                .HasColumnName("direccion");
+            entity.Property(e => e.Estado)
+                .HasMaxLength(64)
+                .HasColumnName("estado");
             entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
             entity.Property(e => e.Latitud)
                 .HasPrecision(10, 7)
@@ -55,13 +60,9 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Longitud)
                 .HasPrecision(10, 7)
                 .HasColumnName("longitud");
-            entity.Property(e => e.NumeroInterior)
-                .HasMaxLength(16)
-                .HasColumnName("numeroInterior");
 
-            entity.HasOne(d => d.IdSucursalNavigation).WithMany(p => p.DireccionSucursals)
-                .HasForeignKey(d => d.IdSucursal)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.IdSucursalNavigation).WithOne(p => p.DireccionSucursal)
+                .HasForeignKey<DireccionSucursal>(d => d.IdSucursal)
                 .HasConstraintName("direccionSucursal_ibfk_1");
         });
 
@@ -72,12 +73,12 @@ public partial class MyDbContext : DbContext
             entity.ToTable("empresa");
 
             entity.Property(e => e.IdEmpresa).HasColumnName("idEmpresa");
-            entity.Property(e => e.Activo)
-                .HasColumnType("bit(1)")
-                .HasColumnName("activo");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .HasColumnName("nombre");
+            entity.Property(e => e.Empresa1)
+                .HasMaxLength(100)
+                .HasColumnName("empresa");
+            entity.Property(e => e.Giro)
+                .HasMaxLength(100)
+                .HasColumnName("giro");
         });
 
         modelBuilder.Entity<Sucursal>(entity =>
@@ -89,20 +90,13 @@ public partial class MyDbContext : DbContext
             entity.HasIndex(e => e.IdEmpresa, "idEmpresa");
 
             entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
-            entity.Property(e => e.Celular)
-                .HasMaxLength(64)
-                .HasColumnName("celular");
             entity.Property(e => e.IdEmpresa).HasColumnName("idEmpresa");
-            entity.Property(e => e.NombreSucursal)
-                .HasMaxLength(64)
-                .HasColumnName("nombreSucursal");
-            entity.Property(e => e.PaginaWeb)
-                .HasMaxLength(64)
-                .HasColumnName("paginaWeb");
+            entity.Property(e => e.Sucursal1)
+                .HasMaxLength(100)
+                .HasColumnName("sucursal");
 
             entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Sucursals)
                 .HasForeignKey(d => d.IdEmpresa)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("sucursal_ibfk_1");
         });
 
