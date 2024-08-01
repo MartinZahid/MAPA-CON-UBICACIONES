@@ -32,6 +32,7 @@ namespace ApiMapa2.Controllers
 
 
             var sucursales = await _context.Sucursals
+                .Include(s => s.DireccionSucursal)
                 .Include(s => s.IdEmpresaNavigation)
                 .Where(s => s.IdEmpresaNavigation.Giro == giro)
                 .ToListAsync();
