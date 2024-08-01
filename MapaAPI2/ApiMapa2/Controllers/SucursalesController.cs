@@ -23,7 +23,26 @@ namespace ApiMapa2.Controllers
                 .Include(s => s.DireccionSucursal)
                 .ToListAsync());
         }
-        
+
+
+        [HttpGet("giro")]
+
+        public async Task<ActionResult> obtenerSucursalesPorGiro([FromQuery] string giro)
+        {
+
+
+            var sucursales = await _context.Sucursals
+                .Include(s => s.IdEmpresaNavigation)
+                .Where(s => s.IdEmpresaNavigation.Giro == giro)
+                .ToListAsync();
+            if (sucursales == null || !sucursales.Any())
+            {
+                return NotFound("No se encontraron sucursales");
+            }
+
+            return Ok(sucursales);
+        }
+
         [HttpGet("estados")]
         public async Task<ActionResult<List<string>>> listarEstados()
         {
