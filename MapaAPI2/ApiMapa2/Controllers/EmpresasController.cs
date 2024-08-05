@@ -26,6 +26,8 @@ namespace ApiMapa2.Controllers
             var giros = await _context.Empresas
                                 .Select(e => e.Giro)
                                 .Distinct()
+                                .OrderBy(g => g)
+
                                 .ToListAsync();
             return Ok(giros);
         }
